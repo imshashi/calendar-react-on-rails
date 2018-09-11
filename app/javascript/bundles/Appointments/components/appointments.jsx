@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import update from 'immutability-helper';
 import AppointmentForm from './appointment_form';
 import { AppointmentsList } from './appointments_list';
 
@@ -32,7 +33,7 @@ class Appointments extends React.Component {
   }
 
   addNewAppointment(appointment) {
-    const appointments = React.addons.update(
+    const appointments = update(
       this.state.appointments,
       { $push: [appointment] }
     );
