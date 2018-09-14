@@ -31,6 +31,7 @@ class Appointments extends React.Component {
     )
     .done((data) => {
       this.addNewAppointment(data);
+      this.resetErrors();
     })
     .fail((response) => {
       console.log(Object.keys(response.responseJSON));
@@ -48,6 +49,10 @@ class Appointments extends React.Component {
         return new Date(a.apt_time) - new Date(b.apt_time);
       })
     });
+  }
+
+  resetErrors() {
+    this.setState({ errors: {} });
   }
 
   render () {
