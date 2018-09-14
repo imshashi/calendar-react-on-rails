@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import update from 'immutability-helper';
 import AppointmentForm from './appointment_form';
 import { AppointmentsList } from './appointments_list';
+import { FormErrors } from './form_errors';
 
 class Appointments extends React.Component {
   constructor(props) {
@@ -10,7 +11,8 @@ class Appointments extends React.Component {
     this.state = {
       appointments: this.props.appointments,
       title: '',
-      apt_time: ''
+      apt_time: '',
+      errors: {}
     }
   }
 
@@ -29,6 +31,10 @@ class Appointments extends React.Component {
     )
     .done((data) => {
       this.addNewAppointment(data);
+    })
+    .fail((response) => {
+      console.log(Object.keys(response.responseJSON));
+      this.setState({ errors: response.responseJSON });
     });
   }
 
@@ -47,6 +53,7 @@ class Appointments extends React.Component {
   render () {
     return (
       <div>
+        <FormErrors errors={ this.state.errors } />
         <AppointmentForm
           title={ this.state.title }
           apt_time={ this.state.apt_time }
