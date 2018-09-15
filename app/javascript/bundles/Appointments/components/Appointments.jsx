@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import update from 'immutability-helper';
-import AppointmentForm from './appointment_form';
-import { AppointmentsList } from './appointments_list';
-import { FormErrors } from './form_errors';
+import AppointmentForm from './AppointmentForm';
+import { AppointmentsList } from './AppointmentsList';
+import { FormErrors } from './FormErrors';
 
 class Appointments extends React.Component {
   constructor(props) {
