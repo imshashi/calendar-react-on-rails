@@ -10,14 +10,19 @@ class Appointments extends React.Component {
     super(props);
     this.state = {
       appointments: this.props.appointments,
-      title: '',
+      title: 'Appointment Title',
       apt_time: '',
-      errors: {}
+      errors: {},
+      formValid: true
     }
   }
 
   handleUserInput(obj) {
-    this.setState(obj);
+    this.setState(obj, this.validateForm);
+  }
+
+  validateForm() {
+    this.setState({ formValid: this.state.title.trim().length > 2 })
   }
 
   handleFormSubmit() {
@@ -64,6 +69,7 @@ class Appointments extends React.Component {
           apt_time={ this.state.apt_time }
           onUserInput={ this.handleUserInput.bind(this) }
           onFormSubmit={ this.handleFormSubmit.bind(this) }
+          formValid= { this.state.formValid }
         />
         <AppointmentsList
           appointments={ this.state.appointments }
