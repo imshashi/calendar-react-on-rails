@@ -11,10 +11,10 @@ class Appointments extends React.Component {
     super(props);
     this.state = {
       appointments: this.props.appointments,
-      title: {value: '', valid: false},
-      apt_time: {value: '', valid: false},
+      title: { value: '', valid: false },
+      apt_time: { value: '', valid: false },
       errors: {},
-      formValid: true
+      formValid: false
     }
   }
 
@@ -31,10 +31,12 @@ class Appointments extends React.Component {
 
     switch(fieldName) {
       case 'title':
-        fieldValid = this.state.title.value.trim().length > 2
+        fieldValid = this.state.title.value.trim().length > 2;
+        break;
       case 'apt_time':
         fieldValid = moment(this.state.apt_time.value).isValid() &&
-                      moment(this.state.apt_time.value).isAfter()
+                      moment(this.state.apt_time.value).isAfter();
+        break;
       default:
         break;
     }
@@ -42,13 +44,13 @@ class Appointments extends React.Component {
     const newFieldState = update(this.state[fieldName],
         { valid: { $set: fieldValid } }
       )
-    this.setState({ [fieldName]: newFieldState });
+    this.setState({ [fieldName]: newFieldState }, this.validateForm);
   }
 
   validateForm() {
-    this.setState({ formValid: this.state.title.trim().length > 2 &&
-      moment(this.state.apt_time).isValid() &&
-      moment(this.state.apt_time).isAfter()
+    this.setState({ formValid:
+      this.state.title.valid &&
+      this.state.apt_time.valid
     })
   }
 

@@ -10,6 +10,7 @@ class AppointmentForm extends React.Component {
   handleChange(e) {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
+
     this.props.onUserInput(fieldName, fieldValue);
   }
 
