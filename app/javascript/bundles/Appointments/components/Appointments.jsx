@@ -28,14 +28,21 @@ class Appointments extends React.Component {
 
   validateField(fieldName, fieldValue) {
     let fieldValid;
+    let fieldErrors = [];
 
     switch(fieldName) {
       case 'title':
         fieldValid = this.state.title.value.trim().length > 2;
+        if(!fieldValid) {
+          fieldErrors = [' should be at least 3 characters long'];
+        }
         break;
       case 'apt_time':
         fieldValid = moment(this.state.apt_time.value).isValid() &&
                       moment(this.state.apt_time.value).isAfter();
+        if(!fieldValid) {
+          fieldErrors = [' should not be in the past'];
+        }
         break;
       default:
         break;
@@ -44,7 +51,16 @@ class Appointments extends React.Component {
     const newFieldState = update(this.state[fieldName],
         { valid: { $set: fieldValid } }
       )
-    this.setState({ [fieldName]: newFieldState }, this.validateForm);
+
+    const newFormErrors = update(this.state.errors,
+        {
+          $merge: {
+            [fieldName]: fieldErrors
+          }
+        }
+      );
+
+    this.setState({ [fieldName]: newFieldState, errors: newFormErrors }, this.validateForm);
   }
 
   validateForm() {
