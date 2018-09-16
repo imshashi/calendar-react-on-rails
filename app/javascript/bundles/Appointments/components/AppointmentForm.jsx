@@ -8,10 +8,9 @@ class AppointmentForm extends React.Component {
   }
 
   handleChange(e) {
-    const name = e.target.name;
-    const obj = {};
-    obj[name] = e.target.value;
-    this.props.onUserInput(obj);
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+    this.props.onUserInput(fieldName, fieldValue);
   }
 
   handleSubmit(e) {
@@ -20,11 +19,10 @@ class AppointmentForm extends React.Component {
   }
 
   setAptTime(e) {
-    const name = 'apt_time';
-    const obj = {};
-    if(obj[name] = e.toDate()) {
-      this.props.onUserInput(obj);
-    }
+    const fieldName = 'apt_time';
+    const fieldValue = e.toDate();
+
+    this.props.onUserInput(fieldName, fieldValue);
   }
 
   render() {

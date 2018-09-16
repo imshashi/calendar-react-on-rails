@@ -11,15 +11,38 @@ class Appointments extends React.Component {
     super(props);
     this.state = {
       appointments: this.props.appointments,
-      title: '',
-      apt_time: '',
+      title: {value: '', valid: false},
+      apt_time: {value: '', valid: false},
       errors: {},
       formValid: true
     }
   }
 
-  handleUserInput(obj) {
-    this.setState(obj, this.validateForm);
+  handleUserInput(fieldName, fieldValue) {
+    const newFieldState = update(this.state[fieldName],
+        { value: { $set: fieldValue } }
+      )
+    this.setState({ [fieldName]: newFieldState },
+      () => { this.validateField(fieldName, fieldValue) });
+  }
+
+  validateField(fieldName, fieldValue) {
+    let fieldValid;
+
+    switch(fieldName) {
+      case 'title':
+        fieldValid = this.state.title.value.trim().length > 2
+      case 'apt_time':
+        fieldValid = moment(this.state.apt_time.value).isValid() &&
+                      moment(this.state.apt_time.value).isAfter()
+      default:
+        break;
+    }
+
+    const newFieldState = update(this.state[fieldName],
+        { valid: { $set: fieldValid } }
+      )
+    this.setState({ [fieldName]: newFieldState });
   }
 
   validateForm() {
@@ -31,8 +54,8 @@ class Appointments extends React.Component {
 
   handleFormSubmit() {
     const appointment = {
-      title: this.state.title,
-      apt_time: this.state.apt_time
+      title: this.state.title.value,
+      apt_time: this.state.apt_time.value
     }
 
     $.post('/appointments',
@@ -69,8 +92,8 @@ class Appointments extends React.Component {
       <div>
         <FormErrors errors={ this.state.errors } />
         <AppointmentForm
-          title={ this.state.title }
-          apt_time={ this.state.apt_time }
+          title={ this.state.title.value }
+          apt_time={ this.state.apt_time.value }
           onUserInput={ this.handleUserInput.bind(this) }
           onFormSubmit={ this.handleFormSubmit.bind(this) }
           formValid= { this.state.formValid }
