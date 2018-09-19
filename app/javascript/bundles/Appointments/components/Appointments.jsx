@@ -18,35 +18,43 @@ class Appointments extends React.Component {
     }
   }
 
-  handleUserInput(fieldName, fieldValue) {
+  handleUserInput(fieldName, fieldValue, validations) {
     const newFieldState = update(this.state[fieldName],
         { value: { $set: fieldValue } }
       )
     this.setState({ [fieldName]: newFieldState },
-      () => { this.validateField(fieldName, fieldValue) });
+      () => { this.validateField(fieldName, fieldValue, validations) });
   }
 
-  validateField(fieldName, fieldValue) {
+  validateField(fieldName, fieldValue, validations) {
     let fieldValid;
-    let fieldErrors = [];
+    let fieldErrors = validations.reduce((errors, v) => {
+      let e = v(fieldValue);
+      if(e !== '') {
+        errors.push(e);
+      }
+      return errors;
+    }, []);
 
-    switch(fieldName) {
-      case 'title':
-        fieldValid = this.state.title.value.trim().length > 2;
-        if(!fieldValid) {
-          fieldErrors = [' should be at least 3 characters long'];
-        }
-        break;
-      case 'apt_time':
-        fieldValid = moment(this.state.apt_time.value).isValid() &&
-                      moment(this.state.apt_time.value).isAfter();
-        if(!fieldValid) {
-          fieldErrors = [' should not be in the past'];
-        }
-        break;
-      default:
-        break;
-    }
+    fieldValid = fieldErrors.length === 0;
+
+    // switch(fieldName) {
+    //   case 'title':
+    //     fieldValid = this.state.title.value.trim().length > 2;
+    //     if(!fieldValid) {
+    //       fieldErrors = [' should be at least 3 characters long'];
+    //     }
+    //     break;
+    //   case 'apt_time':
+    //     fieldValid = moment(this.state.apt_time.value).isValid() &&
+    //                   moment(this.state.apt_time.value).isAfter();
+    //     if(!fieldValid) {
+    //       fieldErrors = [' should not be in the past'];
+    //     }
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     const newFieldState = update(this.state[fieldName],
         { valid: { $set: fieldValid } }

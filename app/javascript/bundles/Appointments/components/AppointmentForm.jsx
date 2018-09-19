@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
+import { validations } from '../../utils/validations';
 
 class AppointmentForm extends React.Component {
+  static formValidations = {
+    title: [
+      (s) => { return (validations.checkMinLength(s, 3)) }
+    ],
+    apt_time: [
+      (t) => { return (validations.checkValidDate(t)) }
+    ]
+  }
+
   constructor(props) {
     super(props);
   }
@@ -11,7 +21,7 @@ class AppointmentForm extends React.Component {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
 
-    this.props.onUserInput(fieldName, fieldValue);
+    this.props.onUserInput(fieldName, fieldValue, AppointmentForm.formValidations[fieldName]);
   }
 
   handleSubmit(e) {
@@ -23,7 +33,7 @@ class AppointmentForm extends React.Component {
     const fieldName = 'apt_time';
     const fieldValue = e.toDate();
 
-    this.props.onUserInput(fieldName, fieldValue);
+    this.props.onUserInput(fieldName, fieldValue, AppointmentForm.formValidations[fieldName]);
   }
 
   render() {
