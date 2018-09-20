@@ -7,12 +7,16 @@ import { FormErrors } from './FormErrors';
 import moment from 'moment';
 
 class Appointments extends React.Component {
+  static propTypes = {
+    appointments: PropTypes.array.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       appointments: this.props.appointments,
       title: { value: '', valid: false },
-      apt_time: { value: '', valid: false },
+      apt_time: { value: new Date(), valid: false },
       errors: {},
       formValid: false
     }
@@ -37,24 +41,6 @@ class Appointments extends React.Component {
     }, []);
 
     fieldValid = fieldErrors.length === 0;
-
-    // switch(fieldName) {
-    //   case 'title':
-    //     fieldValid = this.state.title.value.trim().length > 2;
-    //     if(!fieldValid) {
-    //       fieldErrors = [' should be at least 3 characters long'];
-    //     }
-    //     break;
-    //   case 'apt_time':
-    //     fieldValid = moment(this.state.apt_time.value).isValid() &&
-    //                   moment(this.state.apt_time.value).isAfter();
-    //     if(!fieldValid) {
-    //       fieldErrors = [' should not be in the past'];
-    //     }
-    //     break;
-    //   default:
-    //     break;
-    // }
 
     const newFieldState = update(this.state[fieldName],
         { valid: { $set: fieldValid } }
@@ -118,8 +104,8 @@ class Appointments extends React.Component {
       <div>
         <FormErrors errors={ this.state.errors } />
         <AppointmentForm
-          title={ this.state.title.value }
-          apt_time={ this.state.apt_time.value }
+          title={ this.state.title }
+          apt_time={ this.state.apt_time }
           onUserInput={ this.handleUserInput.bind(this) }
           onFormSubmit={ this.handleFormSubmit.bind(this) }
           formValid= { this.state.formValid }
@@ -131,9 +117,5 @@ class Appointments extends React.Component {
     );
   }
 }
-
-Appointments.propTypes = {
-  appointments: PropTypes.array.isRequired
-};
 
 export default Appointments;

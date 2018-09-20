@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { capitalize } from '../../utils/strings';
 
 export const FormErrors = ({ errors }) =>
@@ -11,3 +12,7 @@ export const FormErrors = ({ errors }) =>
       )
     })}
   </div>
+
+FormErrors.propTypes = {
+  errors: PropTypes.object.isRequired
+}

@@ -4,6 +4,20 @@ import Datetime from 'react-datetime';
 import { validations } from '../../utils/validations';
 
 class AppointmentForm extends React.Component {
+  static propTypes = {
+    title: PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      valid: PropTypes.bool.isRequired
+    }).isRequired,
+    apt_time: PropTypes.shape({
+      value: PropTypes.instanceOf(Date).isRequired,
+      valid: PropTypes.bool.isRequired
+    }).isRequired,
+    formValid: PropTypes.bool.isRequired,
+    onUserInput: PropTypes.func.isRequired,
+    onFormSubmit: PropTypes.func.isRequired
+  }
+
   static formValidations = {
     title: [
       (s) => { return (validations.checkMinLength(s, 3)) }
@@ -47,13 +61,13 @@ class AppointmentForm extends React.Component {
           <input
             name="title"
             placeholder="Appointment Title"
-            value={ this.props.title }
+            value={ this.props.title.value }
             onChange={ this.handleChange.bind(this) }
           />
           <Datetime
             input={ false }
             inputProps={ inputProps }
-            value={ this.props.apt_time }
+            value={ this.props.apt_time.value }
             onChange={ this.setAptTime.bind(this) }
           />
           <input
@@ -67,10 +81,5 @@ class AppointmentForm extends React.Component {
     );
   }
 }
-
-AppointmentForm.propTypes = {
-  onUserInput: PropTypes.func.isRequired,
-  onFormSubmit: PropTypes.func.isRequired
-};
 
 export default AppointmentForm;
