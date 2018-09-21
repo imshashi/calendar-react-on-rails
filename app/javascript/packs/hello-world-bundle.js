@@ -1,8 +1,8 @@
 import ReactOnRails from 'react-on-rails';
 
-import Appointments from '../bundles/Appointments/components/Appointments';
+import AppRouter from '../bundles/AppRouter/components/AppRouter';
 
 // This is how react_on_rails can see the HelloWorld in the browser.
 ReactOnRails.register({
-  Appointments,
+  AppRouter,
 });
